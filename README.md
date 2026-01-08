@@ -322,7 +322,7 @@ services:
   ssh-tunnel-2:
     # ... 基本配置  
     environment:
-      - SSH_HOST=1.14.206.161
+      - SSH_HOST=192.168.13.321
     ports:
       - "25673:25672"  # 不同的宿主机端口
 ```
