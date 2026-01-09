@@ -12,7 +12,7 @@
 
 ### 部署方式
 
-#### 方式1：使用预构建镜像（推荐，最快）
+#### 方式1：使用预构建镜像（推荐，最快）[DokcerHub](https://hub.docker.com/r/earmo/multi-tunnel-ssh-tunnel)
 
 **1. 拉取镜像**
 ```powershell
@@ -425,8 +425,8 @@ MIT License
 
 1. 查看本文档的故障排除章节
 2. 检查容器日志：`docker-compose logs ssh-tunnel`
-3. 提交Issue到项目仓库
+3. 提交Issue到项目仓库[Github](https://github.com/Earmo/multi-tunnel-ssh-tunnel )
 
 ---
 
-**最后更新：** 2026-01-08
+**最后更新：** 2026-01-09
