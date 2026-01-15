@@ -1,0 +1,71 @@
+name: Docker Build and Push
+
+# 触发条件：
+# 1. 推送到 main 或 master 分支
+# 2. 推送以 v 开头的 tag (例如 v1.0.0)
+# 3. 针对 main 或 master 分支的 Pull Request
+on:
+  push:
+    branches: [ "main", "master" ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+env:
+  # 镜像名称，默认使用 multi-tunnel，可根据需要修改
+  IMAGE_NAME: multi-tunnel
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 设置 QEMU 以支持多架构构建 (如 linux/amd64, linux/arm64)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 设置 Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 登录 Docker Hub (仅在非 PR 时执行)
+      # 需要在 GitHub 仓库 Settings -> Secrets and variables -> Actions 中配置:
+      # - DOCKERHUB_USERNAME: Docker Hub 用户名
+      # - DOCKERHUB_TOKEN: Docker Hub Access Token
+      - name: Log into Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 提取 metadata (tags, labels)
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=sha
+
+      # 构建并推送镜像
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # 如果不需要多架构，可以移除 platforms
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
