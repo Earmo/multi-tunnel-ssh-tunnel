@@ -10,6 +10,7 @@ services:
       # ... 按需增加端口和TUNNEL_CONFIG配置
     environment:
       - BASTION_HOST=${SSH_HOST}         # 堡垒机地址
+      - SSH_PORT=${SSH_PORT:-22}         # 堡垒机SSH端口
       - SSH_USER=${SSH_USER}             # 堡垒机用户名
       - SSH_PASSWORD=${SSH_PASSWORD}     # 堡垒机密码（从环境变量获取）
       - >-

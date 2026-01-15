@@ -45,7 +45,7 @@ chown -R root:root /root/.ssh
 
 # 添加目标主机到 known_hosts（避免首次连接时的交互提示）
 echo "扫描主机密钥..."
-ssh-keyscan -H "${BASTION_HOST}" >> /root/.ssh/known_hosts 2>/dev/null || echo "警告: 无法扫描主机密钥"
+ssh-keyscan -p "${SSH_PORT}" -H "${BASTION_HOST}" >> /root/.ssh/known_hosts 2>/dev/null || echo "警告: 无法扫描主机密钥"
 
 # 测试网络连通性（ping可能被防火墙阻止，但SSH仍可工作）
 echo "测试网络连通性..."
