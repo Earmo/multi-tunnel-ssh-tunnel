@@ -6,10 +6,10 @@ name: Docker Build and Push
 # 3. 针对 main 或 master 分支的 Pull Request
 on:
   push:
-    branches: [ "main", "master" ]
+#    branches: [ "main", "master" ]
     tags: [ 'v*' ]
   pull_request:
-    branches: [ "main", "master" ]
+#    branches: [ "main", "master" ]
 
 env:
   # 镜像名称
