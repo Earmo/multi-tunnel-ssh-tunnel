@@ -12,8 +12,8 @@ on:
     branches: [ "main", "master" ]
 
 env:
-  # 镜像名称，默认使用 multi-tunnel，可根据需要修改
-  IMAGE_NAME: multi-tunnel
+  # 镜像名称
+  IMAGE_NAME: multi-tunnel-ssh-tunnel
 
 jobs:
   build:
