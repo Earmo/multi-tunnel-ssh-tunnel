@@ -57,7 +57,7 @@ else
 fi
 
 # 构建 SSH 命令 - 绑定到所有接口以便Docker端口映射工作
-SSH_CMD="autossh -M 0 -N -v -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o GatewayPorts=yes"
+SSH_CMD="autossh -M 0 -N -v -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=no -o GatewayPorts=yes -p ${SSH_PORT}"
 
 # 添加多个端口转发
 # 去除配置中的所有空格（支持多行格式）
@@ -92,6 +92,9 @@ elif [ -f /root/.ssh/id_rsa ]; then
     exec $SSH_CMD
 else
     echo "错误: 没有提供密码或SSH密钥"
+    echo "请设置SSH_PASSWORD环境变量或将私钥放到ssh_key/id_rsa"
+    exit 1
+fi
     echo "请设置SSH_PASSWORD环境变量或将私钥放到ssh_key/id_rsa"
     exit 1
 fi
